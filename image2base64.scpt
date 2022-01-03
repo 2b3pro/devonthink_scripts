@@ -6,11 +6,11 @@ tell application id "DNtp"
 	try
 		set this_selection to the selection
 		set the_group to the current group
-		if this_selection is {""} then error "Please select some image files."
+		if this_selection is {} then error "Please select some image files."
 		repeat with this_item in this_selection
-			set the_rectype to the type of this_item as string
-			set the_imagetype to the MIME type of this_item
-			if the_rectype = "picture" or the_imagetype = "image/svg+xml" then
+			set the_MIMEtype to the MIME type of this_item
+			set allowedImageTypes to {"image/jpeg", "image/png", "image/svg+xml", "image/gif", "application/pdf"}
+			if allowedImageTypes contains the_MIMEtype then
 				try
 					set this_path to the path of this_item
 					set the_tags to the tags of this_item
@@ -20,11 +20,11 @@ tell application id "DNtp"
 					with timeout of 45 seconds
 						set the_results to (do shell script "base64 " & this_path)
 					end timeout
-					set the plain text of the_record to ("data:" & the_imagetype & ";base64," & the_results) as string
+					set the plain text of the_record to ("data:" & the_MIMEtype & ";base64," & the_results) as string
 					set the tags of the_record to the_tags
 				end try
 			else
-				display alert "This file is not an image file."
+				display alert "This file is not an allowed image file."
 			end if
 		end repeat
 	on error error_message number error_number
