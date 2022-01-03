@@ -18,7 +18,7 @@ tell application id "DNtp"
 					set the_record to (create record with {type:"text", name:(name without extension of this_item) & "-b64.txt"} in the_group)
 					set the_b64_path to the path of the_record
 					with timeout of 45 seconds
-						set the_results to (do shell script "/usr/bin/openssl base64 -in " & this_path)
+						set the_results to (do shell script "base64 " & this_path)
 					end timeout
 					set the plain text of the_record to ("data:" & the_imagetype & ";base64," & the_results) as string
 					set the tags of the_record to the_tags
